@@ -1,4 +1,4 @@
-import pool from '../lib/db';
+import pool from '../lib/db.js';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 // const { uploadToSupabase, supabase } = require('../middleware/upload');

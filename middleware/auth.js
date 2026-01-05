@@ -1,4 +1,4 @@
-import pool from '../lib/db';
+import pool from '../lib/db.js';
 import jwt from 'jsonwebtoken';
 
 function getCookie(req, name) {

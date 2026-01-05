@@ -1,5 +1,5 @@
-import { verifyToken } from "../../middleware/auth";
-import { getProfile } from "../../controllers/auth.controller";
+import { verifyToken } from "../../middleware/auth.js";
+import { getProfile } from "../../controllers/auth.controller.js";
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
