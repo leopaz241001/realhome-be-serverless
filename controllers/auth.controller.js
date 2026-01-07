@@ -48,13 +48,6 @@ export async function login(req, res) {
             { expiresIn: '24h' }
         );
 
-        // Set cookie HttpOnly thay vì trả token
-        // res.cookie('access_token', accessToken, {
-        //     httpOnly: true,
-        //     secure: process.env.NODE_ENV === 'production', // chỉ bật secure trên HTTPS
-        //     sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-        //     maxAge: 24 * 60 * 60 * 1000 // 24h
-        // });
         res.setHeader(
             'Set-Cookie',
             `access_token=${accessToken}; Path=/; HttpOnly; SameSite=None; Secure; Max-Age=86400`

@@ -1,5 +1,4 @@
-import { verifyToken } from "../../middleware/auth.js";
-import { getProfile } from "../../controllers/auth.controller.js";
+import { verifyToken, requireRole } from "../middleware/auth.js";
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -9,6 +8,10 @@ export default async function handler(req, res) {
   const user = await verifyToken(req, res);
   if (!user) return;
 
-  // Truyền user vào controller
-  return getProfile(req, res, user);
+  const isAdmin = requireRole(user, res, "admin");
+  if (!isAdmin) return;
+
+  return res.json({
+    message: `Hello admin`,
+  });
 }

@@ -2,7 +2,7 @@ import pool from '../lib/db.js';
 import jwt from 'jsonwebtoken';
 
 function getCookie(req, name) {
-    const cookies = req.headers.cookie;
+    const cookies = req.headers.cookie; // `access_token=${accessToken}; Path=/; HttpOnly; SameSite=None; Secure; Max-Age=86400`
     if (!cookies) return null;
 
     const match = cookies
@@ -14,8 +14,6 @@ function getCookie(req, name) {
 }
 
 export async function verifyToken(req, res) {
-    // const authHeader = req.headers['authorization'];
-    // const token = authHeader && authHeader.split(' ')[1]; // "Bearer <token>"
     const token = getCookie(req, 'access_token');
 
     if (!token) return res.status(401).json({ error: 'No token provided' });
@@ -23,10 +21,7 @@ export async function verifyToken(req, res) {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        const { rows } = await pool.query(
-            'SELECT id, name, email, role FROM users WHERE id = $1',
-            [decoded.id]
-        );
+        const { rows } = await pool.query('SELECT * FROM users WHERE id = $1', [decoded.id]);
 
         if (!rows.length) {
             res.status(404).json({ error: 'Người dùng không tồn tại.' });
