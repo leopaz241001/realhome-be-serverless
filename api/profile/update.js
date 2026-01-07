@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { email, name, phone } = req.body;
+  const { email, name, phone, avatar } = req.body;
   const user = await verifyToken(req, res);
   const userId = user.id;
 
@@ -29,25 +29,9 @@ export default async function handler(req, res) {
       fields.push(`phone = $${index++}`);
       values.push(phone);
     }
-    // Thêm avatar
-    if (req.file) {
-      // Lấy avatar hiện tại từ DB
-      const current = await pool.query('SELECT avatar FROM users WHERE id = $1', [userId]);
-      const currentAvatarUrl = current.rows[0]?.avatar;
-
-      // Nếu có avatar cũ → xóa trong bucket
-      if (currentAvatarUrl) {
-        // tách tên file từ public URL 
-        const oldFileName = currentAvatarUrl.split('/avatars/')[1];
-        await supabase.storage.from('avatars').remove([oldFileName]);
-      }
-
-      // Upload avatar mới lên Supabase
-      const avatarUrl = await uploadToSupabase('avatars', req.file);
-
-      // Cập nhật cột avatar bằng URL
+    if (avatar) {
       fields.push(`avatar = $${index++}`);
-      values.push(avatarUrl);
+      values.push(avatar);
     }
 
     if (fields.length === 0) {
