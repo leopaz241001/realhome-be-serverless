@@ -1,6 +1,5 @@
 import pool from "../../lib/db.js";
 import { verifyToken } from "../../middleware/auth.js";
-import { supabase, uploadToSupabase } from "../../middleware/upload.js";
 
 export default async function handler(req, res) {
   if (req.method !== 'PUT') {
