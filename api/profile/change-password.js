@@ -1,8 +1,11 @@
+import { applyCors } from "../../lib/cors.js";
 import pool from "../../lib/db.js";
 import { verifyToken } from "../../middleware/auth.js";
 import bcrypt from "bcrypt";
 
 export default async function handler(req, res) {
+  if(applyCors(req, res)) return;
+  
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }

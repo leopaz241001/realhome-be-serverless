@@ -1,6 +1,6 @@
+import { applyCors } from "../lib/cors.js";
 import pool from "../lib/db.js";
 import bcrypt from 'bcrypt';
-import { applyCors } from "../lib/cors.js";
 
 export default async function handler(req, res) {
   if(applyCors(req, res)) return;
