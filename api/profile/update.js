@@ -1,6 +1,7 @@
 import { applyCors } from "../../lib/cors.js";
 import pool from "../../lib/db.js";
 import { verifyToken } from "../../middleware/auth.js";
+import { supabase } from "../../middleware/upload.js";
 
 export default async function handler(req, res) {
   if(applyCors(req, res)) return;
@@ -32,6 +33,17 @@ export default async function handler(req, res) {
       values.push(phone);
     }
     if (avatar) {
+      // Lấy avatar hiện tại từ DB
+      const current = await pool.query('SELECT avatar FROM users WHERE id = $1', [userId]);
+      const currentAvatarUrl = current.rows[0]?.avatar;
+
+      // Nếu có avatar cũ → xóa trong bucket
+      if (currentAvatarUrl) {
+        // tách tên file từ public URL 
+        const oldFileName = currentAvatarUrl.split('/avatars/')[1]; 
+        await supabase.storage.from('avatars').remove([oldFileName]);
+      }
+
       fields.push(`avatar = $${index++}`);
       values.push(avatar);
     }

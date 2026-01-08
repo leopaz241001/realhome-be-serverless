@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 // Khởi tạo Supabase client
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+export const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 // Hàm upload file lên supabase
 export async function uploadToSupabase(bucket, file) {
