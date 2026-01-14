@@ -16,14 +16,14 @@ export default async function handler(req, res) {
     const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
     if (userResult.rows.length === 0) {
-      return res.status(401).json({ error: 'Email không tồn tại.' });
+      return res.status(401).json({ message: 'Email không tồn tại.' });
     }
 
     const user = userResult.rows[0];
     const valid = await bcrypt.compare(password, user.password_hash);
 
     if (!valid) {
-      return res.status(401).json({ error: 'Mật khẩu không đúng.' });
+      return res.status(401).json({ message: 'Mật khẩu không đúng.' });
     }
 
     const accessToken = jwt.sign(
@@ -47,6 +47,6 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ error: 'Đăng nhập thất bại.', message: err.message });
+    res.status(500).json({ message: 'Đăng nhập thất bại.', message: err.message });
   }
 }

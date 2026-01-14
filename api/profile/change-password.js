@@ -17,22 +17,22 @@ export default async function handler(req, res) {
   try {
     // 1. Kiểm tra 3 field bắt buộc
     if (!currentPassword || !newPassword || !confirmPassword) {
-      return res.status(400).json({ error: "Thiếu dữ liệu bắt buộc." });
+      return res.status(400).json({ message: "Thiếu dữ liệu bắt buộc." });
     }
 
     if (newPassword !== confirmPassword) {
-      return res.status(400).json({ error: "Nhập lại mật khẩu mới không khớp." });
+      return res.status(400).json({ message: "Nhập lại mật khẩu mới không khớp." });
     }
 
     // 2. Lấy password hiện tại trong DB
     const { rows } = await pool.query("SELECT password_hash FROM users WHERE id = $1", [userId]);
     const user = rows[0];
-    if (!user) return res.status(404).json({ error: "Người dùng không tồn tại." });
+    if (!user) return res.status(404).json({ message: "Người dùng không tồn tại." });
 
     // 3. So sánh mật khẩu hiện tại
     const isMatch = await bcrypt.compare(currentPassword, user.password_hash);
     if (!isMatch) {
-      return res.status(401).json({ error: "Mật khẩu hiện tại không đúng." });
+      return res.status(401).json({ message: "Mật khẩu hiện tại không đúng." });
     }
 
     // 4. Hash mật khẩu mới
@@ -44,6 +44,6 @@ export default async function handler(req, res) {
     res.json({ message: "Thay đổi mật khẩu thành công." });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Lỗi khi đổi mật khẩu." });
+    res.status(500).json({ message: "Lỗi khi đổi mật khẩu." });
   }
 }

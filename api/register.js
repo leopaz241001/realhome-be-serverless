@@ -22,10 +22,10 @@ export default async function handler(req, res) {
   } catch (error) {
     if (error.code === '23505') {
       console.error(error.message);
-      res.status(400).json({ error: 'Email đã tồn tại!' });
+      res.status(400).json({ message: 'Email đã tồn tại!' });
     } else {
       console.error(error.message);
-      res.status(500).json({ error: 'Đăng ký không thành công, hãy thử lại!' });
+      res.status(500).json({ message: 'Đăng ký không thành công, hãy thử lại!' });
     }
   }
 }

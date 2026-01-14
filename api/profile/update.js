@@ -49,7 +49,7 @@ export default async function handler(req, res) {
     }
 
     if (fields.length === 0) {
-      return res.status(400).json({ error: 'Không có dữ liệu để cập nhật.' });
+      return res.status(400).json({ message: 'Không có dữ liệu để cập nhật.' });
     }
 
     values.push(userId); // cuối cùng là id
@@ -65,6 +65,6 @@ export default async function handler(req, res) {
     res.json({ message: 'Cập nhật thành công.', user: result.rows[0] });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ error: 'Cập nhật không thành công.' });
+    res.status(500).json({ message: 'Cập nhật không thành công.' });
   }
 }

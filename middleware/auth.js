@@ -16,7 +16,7 @@ function getCookie(req, name) {
 export async function verifyToken(req, res) {
     const token = getCookie(req, 'access_token');
 
-    if (!token) return res.status(401).json({ error: 'No token provided' });
+    if (!token) return res.status(401).json({ message: 'No token provided' });
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -24,20 +24,20 @@ export async function verifyToken(req, res) {
         const { rows } = await pool.query('SELECT * FROM users WHERE id = $1', [decoded.id]);
 
         if (!rows.length) {
-            res.status(404).json({ error: 'Người dùng không tồn tại.' });
+            res.status(404).json({ message: 'Người dùng không tồn tại.' });
             return null;
         }
 
         return rows[0];
     } catch (err) {
-        res.status(403).json({ error: 'Invalid token' });
+        res.status(403).json({ message: 'Invalid token' });
         return null;
     }
 };
 
 export function requireRole(user, res, ...roles) {
     if (!roles.includes(user.role)) {
-        res.status(403).json({ error: 'Bạn không có quyền truy cập.' });
+        res.status(403).json({ message: 'Bạn không có quyền truy cập.' });
         return false;
     }
     return true;
